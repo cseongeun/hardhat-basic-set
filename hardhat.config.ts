@@ -5,8 +5,6 @@ import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-solhint";
 import "solidity-coverage";
-
-
 // import "hardhat-spdx-license-identifier";
 
 const hardhatConfig: HardhatUserConfig =  {
