@@ -1,6 +1,8 @@
 import { HardhatUserConfig } from "hardhat/types";
 import "hardhat-gas-reporter";
 import "hardhat-typechain";
+import "hardhat-abi-exporter";
+
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-solhint";
@@ -14,7 +16,7 @@ const hardhatConfig: HardhatUserConfig =  {
     hardhat: {},
   },  
   solidity: {
-    version: "0.8.0",
+    version: "0.6.1",
     settings: {
       optimizer: {
         enabled: false,
@@ -26,8 +28,14 @@ const hardhatConfig: HardhatUserConfig =  {
     enabled: false,
   },
   typechain: {
-    outDir: "src/types",
+    outDir: "src/typechain",
     target: "ethers-v5",
+  },
+  abiExporter: {
+    path: "abis",
+    clear: true,
+    flat: true,
+    spacing: 2,
   }
   // TODO: Add spdx license identifier
   // spdxLicenseIdentifier: {
