@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { ERC20Pausable } from "../ERC20Pausable";
+import type { ERC721URIStorage } from "../ERC721URIStorage";
 
-export class ERC20Pausable__factory {
+export class ERC721URIStorage__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC20Pausable {
-    return new Contract(address, _abi, signerOrProvider) as ERC20Pausable;
+  ): ERC721URIStorage {
+    return new Contract(address, _abi, signerOrProvider) as ERC721URIStorage;
   }
 }
 
@@ -71,19 +71,6 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Paused",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: "address",
         name: "from",
@@ -103,19 +90,6 @@ const _abi = [
       },
     ],
     name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Unpaused",
     type: "event",
   },
   {
@@ -225,19 +199,6 @@ const _abi = [
         internalType: "address",
         name: "",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paused",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
       },
     ],
     stateMutability: "view",

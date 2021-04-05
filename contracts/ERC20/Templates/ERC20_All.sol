@@ -24,8 +24,6 @@ contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, 
     super.mint(amount);
   }
 
-
-  /* 유동 잔액 확인 */
   function balanceOf(address account) public view override(ERC20, ERC20TimeLockable) returns (uint256) {
     return super.balanceOf(account);
   }

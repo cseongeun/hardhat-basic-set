@@ -14,7 +14,7 @@ import {
 const { AddressZero, NegativeOne, Zero, One, Two } = constants;
 const Three: BigNumber = BigNumber.from(3);
 
-const { duration, increaseTo, latest, latestBlock, advanceBlockTo } = time;
+const { duration, increaseTo, latest } = time;
 
 describe("ERC20Mock", function () {
   const MAIN_CONTRACT = 'ERC20All'; 
@@ -28,7 +28,7 @@ describe("ERC20Mock", function () {
   // Token Init Property
   let token: Contract; 
   let tokenName: string = 'ERC20';
-  let tokenSymbol: string = 'ERC';
+  let tokenSymbol: string = 'ERC20';
   let tokenDecimals: number = 18;
   let tokenInitialSupply = BigNumber.from(10000000).mul(BigNumber.from(10).pow(tokenDecimals));
 
@@ -358,17 +358,19 @@ describe("ERC20Mock", function () {
       })
     })
     describe('ERC20TimeLockable', function () {
-      let reason: any;
-      let otherReason: any;
+      let reason: string;
+      let otherReason: string;
+
+
       let now: BigNumber;
       let beforeYear: BigNumber;
       let beforeHour: BigNumber;
       let afterHour: BigNumber;
       let afterYear: BigNumber;
-      
+
       beforeEach(async function () {
-        reason = randomBytes(32);
-        otherReason = randomBytes(32);
+        reason = randomBytes(32)
+        otherReason = randomBytes(32)
 
         now = await latest();
 
@@ -489,6 +491,13 @@ describe("ERC20Mock", function () {
           .to.emit(token, 'Transfer')
           .withArgs(owner.address, user1.address, One)
         expect(await token.balanceOf(user1.address)).to.equal(One);
+      })
+      it('Extensions: Returns transferable token to balanceOf', async function () {
+        await token.connect(owner).transfer(user1.address, One);
+        await token.connect(owner).transferWithLock(user1.address, One, reason, beforeYear)
+        await token.connect(owner).transferWithLock(user1.address, One, otherReason, afterYear)
+
+        expect(await token.balanceOf(user1.address)).to.equal(Two);
       })
       it('Extensions: Returns total tokens which locked and transferable for a specified address ', async function () {
         await token.connect(owner).transferWithLock(user1.address, One, reason, beforeHour);

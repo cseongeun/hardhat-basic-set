@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../Utils/Context.sol";
+import "../../Utils/Context.sol";
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -16,7 +16,7 @@ import "../Utils/Context.sol";
  * `onlyOwner`, which can be applied to your functions to restrict their use to
  * the owner.
  */
-abstract contract ERC20Ownable is Context {
+abstract contract ERC721Ownable is Context {
   address private _owner;
 
   event OwnershipTransferred(

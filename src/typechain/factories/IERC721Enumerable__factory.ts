@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { ERC20Pausable } from "../ERC20Pausable";
+import type { IERC721Enumerable } from "../IERC721Enumerable";
 
-export class ERC20Pausable__factory {
+export class IERC721Enumerable__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC20Pausable {
-    return new Contract(address, _abi, signerOrProvider) as ERC20Pausable;
+  ): IERC721Enumerable {
+    return new Contract(address, _abi, signerOrProvider) as IERC721Enumerable;
   }
 }
 
@@ -71,19 +71,6 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Paused",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: "address",
         name: "from",
@@ -103,19 +90,6 @@ const _abi = [
       },
     ],
     name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Unpaused",
     type: "event",
   },
   {
@@ -148,7 +122,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "balance",
         type: "uint256",
       },
     ],
@@ -167,7 +141,7 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "operator",
         type: "address",
       },
     ],
@@ -199,19 +173,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "uint256",
@@ -223,21 +184,8 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "owner",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paused",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -285,7 +233,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "_data",
+        name: "data",
         type: "bytes",
       },
     ],
@@ -303,7 +251,7 @@ const _abi = [
       },
       {
         internalType: "bool",
-        name: "approved",
+        name: "_approved",
         type: "bool",
       },
     ],
@@ -332,13 +280,19 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "symbol",
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "tokenByIndex",
     outputs: [
       {
-        internalType: "string",
+        internalType: "uint256",
         name: "",
-        type: "string",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -347,17 +301,35 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "tokenOfOwnerByIndex",
+    outputs: [
+      {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
       },
     ],
-    name: "tokenURI",
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
     outputs: [
       {
-        internalType: "string",
+        internalType: "uint256",
         name: "",
-        type: "string",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

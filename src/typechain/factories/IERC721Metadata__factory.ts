@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { ERC20Pausable } from "../ERC20Pausable";
+import type { IERC721Metadata } from "../IERC721Metadata";
 
-export class ERC20Pausable__factory {
+export class IERC721Metadata__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): ERC20Pausable {
-    return new Contract(address, _abi, signerOrProvider) as ERC20Pausable;
+  ): IERC721Metadata {
+    return new Contract(address, _abi, signerOrProvider) as IERC721Metadata;
   }
 }
 
@@ -71,19 +71,6 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Paused",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: "address",
         name: "from",
@@ -103,19 +90,6 @@ const _abi = [
       },
     ],
     name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "Unpaused",
     type: "event",
   },
   {
@@ -148,7 +122,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "balance",
         type: "uint256",
       },
     ],
@@ -167,7 +141,7 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "operator",
         type: "address",
       },
     ],
@@ -223,21 +197,8 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "",
+        name: "owner",
         type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "paused",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -285,7 +246,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "_data",
+        name: "data",
         type: "bytes",
       },
     ],
@@ -303,7 +264,7 @@ const _abi = [
       },
       {
         internalType: "bool",
-        name: "approved",
+        name: "_approved",
         type: "bool",
       },
     ],
