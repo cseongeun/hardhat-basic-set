@@ -2,17 +2,23 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ERC20 } from "./ERC20";
+export type { ERC20Burnable } from "./ERC20Burnable";
 export type { ERC20Freezable } from "./ERC20Freezable";
+export type { ERC20Mintable } from "./ERC20Mintable";
 export type { ERC20Ownable } from "./ERC20Ownable";
 export type { ERC20Pausable } from "./ERC20Pausable";
 export type { ERC20TimeLockable } from "./ERC20TimeLockable";
 export type { IERC20 } from "./IERC20";
+export type { IERC20Metadata } from "./IERC20Metadata";
 export type { ERC20All } from "./ERC20All";
 
 export { ERC20__factory } from "./factories/ERC20__factory";
+export { ERC20Burnable__factory } from "./factories/ERC20Burnable__factory";
 export { ERC20Freezable__factory } from "./factories/ERC20Freezable__factory";
+export { ERC20Mintable__factory } from "./factories/ERC20Mintable__factory";
 export { ERC20Ownable__factory } from "./factories/ERC20Ownable__factory";
 export { ERC20Pausable__factory } from "./factories/ERC20Pausable__factory";
 export { ERC20TimeLockable__factory } from "./factories/ERC20TimeLockable__factory";
 export { IERC20__factory } from "./factories/IERC20__factory";
+export { IERC20Metadata__factory } from "./factories/IERC20Metadata__factory";
 export { ERC20All__factory } from "./factories/ERC20All__factory";

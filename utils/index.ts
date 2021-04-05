@@ -1,3 +1,4 @@
 export * from './type';
-export * from './constants';
-
+export * from './func';
+export * from './time';
+export * from './translate'

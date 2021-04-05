@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 import "../Core/ERC20.sol";
 
@@ -28,12 +28,21 @@ abstract contract ERC20TimeLockable is ERC20 {
   /**
    * @dev Records data of all the tokens Locked
    */
-  event Locked(address indexed account, bytes32 indexed reason, uint256 amount, uint256 release);
+  event Locked(
+    address indexed account,
+    bytes32 indexed reason,
+    uint256 amount,
+    uint256 release
+  );
 
   /**
    * @dev Records data of all the tokens unlocked
    */
-  event Unlocked(address indexed account, bytes32 indexed reason, uint256 amount);
+  event Unlocked(
+    address indexed account,
+    bytes32 indexed reason,
+    uint256 amount
+  );
 
   /**
    * @dev Locks a specified amount of tokens against an address,
@@ -51,8 +60,14 @@ abstract contract ERC20TimeLockable is ERC20 {
   ) internal virtual returns (bool) {
     // If tokens are already locked, then functions extendLock or
     // increaseLockAmount should be used to make any changes
-    require(account != address(0), "TimeLockable: lock account the zero address");
-    require(tokensLocked(account, reason) == 0, "TimeLockable: Tokens already locked");
+    require(
+      account != address(0),
+      "TimeLockable: lock account the zero address"
+    );
+    require(
+      tokensLocked(account, reason) == 0,
+      "TimeLockable: Tokens already locked"
+    );
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[account] >= amount, "TimeLockable: Not enough amount");
 
@@ -80,8 +95,14 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 release
   ) internal virtual returns (bool) {
-    require(account != address(0), "TimeLockable: lock account the zero address");
-    require(tokensLocked(account, reason) == 0, "TimeLockable: Tokens already locked");
+    require(
+      account != address(0),
+      "TimeLockable: lock account the zero address"
+    );
+    require(
+      tokensLocked(account, reason) == 0,
+      "TimeLockable: Tokens already locked"
+    );
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[msg.sender] >= amount, "TimeLockable: Not enough amount");
 
@@ -97,8 +118,13 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @param account The address whose tokens are locked
    * @param reason The reason to query the lock tokens for
    */
-  function tokensLocked(address account, bytes32 reason) public view returns (uint256 amount) {
-    if (!locked[account][reason].claimed) amount = locked[account][reason].amount;
+  function tokensLocked(address account, bytes32 reason)
+    public
+    view
+    returns (uint256 amount)
+  {
+    if (!locked[account][reason].claimed)
+      amount = locked[account][reason].amount;
   }
 
   /**
@@ -114,18 +140,34 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 time
   ) public view returns (uint256 amount) {
-    if (locked[account][reason].release > time) amount = locked[account][reason].amount;
+    if (locked[account][reason].release > time)
+      amount = locked[account][reason].amount;
+  }
+
+  function balanceOf(address account)
+    public
+    view
+    virtual
+    override
+    returns (uint256)
+  {
+    uint256 unlockableAmount = getUnlockableTokens(account);
+    return super.balanceOf(account) + unlockableAmount;
   }
 
   /**
    * @dev Returns total tokens held by an address (locked + transferable)
    * @param account The address to query the total balance of
    */
-  function totalBalanceOf(address account) public view returns (uint256 amount) {
+  function totalBalanceOf(address account)
+    public
+    view
+    returns (uint256 amount)
+  {
     amount = balanceOf(account);
 
     for (uint256 i = 0; i < lockReason[account].length; i++) {
-      amount = amount.add(tokensLocked(account, lockReason[account][i]));
+      amount = amount + tokensLocked(account, lockReason[account][i]);
     }
   }
 
@@ -140,11 +182,19 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 time
   ) internal virtual returns (bool) {
-    require(tokensLocked(account, reason) > 0, "TimeLockable: No tokens locked");
+    require(
+      tokensLocked(account, reason) > 0,
+      "TimeLockable: No tokens locked"
+    );
 
-    locked[account][reason].release = locked[account][reason].release.add(time);
+    locked[account][reason].release = locked[account][reason].release + time;
 
-    emit Locked(account, reason, locked[account][reason].amount, locked[account][reason].release);
+    emit Locked(
+      account,
+      reason,
+      locked[account][reason].amount,
+      locked[account][reason].release
+    );
     return true;
   }
 
@@ -159,15 +209,23 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 amount
   ) internal virtual returns (bool) {
-    require(tokensLocked(account, reason) > 0, "TimeLockable: No tokens locked");
+    require(
+      tokensLocked(account, reason) > 0,
+      "TimeLockable: No tokens locked"
+    );
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[account] >= amount, "TimeLockable: Not enough amount");
 
     _transfer(account, address(this), amount);
 
-    locked[account][reason].amount = locked[account][reason].amount.add(amount);
+    locked[account][reason].amount = locked[account][reason].amount + amount;
 
-    emit Locked(account, reason, locked[account][reason].amount, locked[account][reason].release);
+    emit Locked(
+      account,
+      reason,
+      locked[account][reason].amount,
+      locked[account][reason].release
+    );
     return true;
   }
 
@@ -176,8 +234,15 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @param account The address to query the the unlockable token count of
    * @param reason The reason to query the unlockable tokens for
    */
-  function tokensUnlockable(address account, bytes32 reason) public view returns (uint256 amount) {
-    if (locked[account][reason].release <= block.timestamp && !locked[account][reason].claimed)
+  function tokensUnlockable(address account, bytes32 reason)
+    public
+    view
+    returns (uint256 amount)
+  {
+    if (
+      locked[account][reason].release <= block.timestamp &&
+      !locked[account][reason].claimed
+    )
       //solhint-disable-line
       amount = locked[account][reason].amount;
   }
@@ -186,13 +251,17 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @dev Unlocks the unlockable tokens of a specified address
    * @param account Address of user, claiming back unlockable tokens
    */
-  function _unlock(address account) internal virtual returns (uint256 unlockableTokens) {
+  function _unlock(address account)
+    internal
+    virtual
+    returns (uint256 unlockableTokens)
+  {
     uint256 lockedTokens;
 
     for (uint256 i = 0; i < lockReason[account].length; i++) {
       lockedTokens = tokensUnlockable(account, lockReason[account][i]);
       if (lockedTokens > 0) {
-        unlockableTokens = unlockableTokens.add(lockedTokens);
+        unlockableTokens = unlockableTokens + lockedTokens;
         locked[account][lockReason[account][i]].claimed = true;
         emit Unlocked(account, lockReason[account][i], lockedTokens);
       }
@@ -205,9 +274,15 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @dev Gets the unlockable tokens of a specified address
    * @param account The address to query the the unlockable token count of
    */
-  function getUnlockableTokens(address account) public view returns (uint256 unlockableTokens) {
+  function getUnlockableTokens(address account)
+    public
+    view
+    returns (uint256 unlockableTokens)
+  {
     for (uint256 i = 0; i < lockReason[account].length; i++) {
-      unlockableTokens = unlockableTokens.add(tokensUnlockable(account, lockReason[account][i]));
+      unlockableTokens = unlockableTokens + (
+        tokensUnlockable(account, lockReason[account][i])
+      );
     }
   }
 

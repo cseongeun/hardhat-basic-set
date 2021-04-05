@@ -1,31 +1,33 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 import "../Core/ERC20.sol";
 import "../Extensions/ERC20Ownable.sol";
 import "../Extensions/ERC20Pausable.sol";
 import "../Extensions/ERC20Freezable.sol";
 import "../Extensions/ERC20TimeLockable.sol";
+import "../Extensions/ERC20Mintable.sol";
+import "../Extensions/ERC20Burnable.sol";
 
-contract ERC20All is ERC20Ownable, ERC20Pausable, ERC20Freezable, ERC20TimeLockable {
+contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, ERC20Freezable, ERC20TimeLockable {
   
   constructor(
     string memory name,
     string memory symbol,
     uint256 initialSupply
-  ) public ERC20(name, symbol) {
+  ) ERC20(name, symbol) {
     _mint(_msgSender(), initialSupply);
   }
 
-  /* 토큰 발행 - 오너 */
-  function mint(uint256 amount) public onlyOwner {
-    _mint(_msgSender(), amount);
+  function mint(uint256 amount) public override(ERC20Mintable) onlyOwner {
+    super.mint(amount);
   }
 
-  /* 토큰 소각 */
-  function burn(uint256 amount) public {
-    _burn(_msgSender(), amount);
+
+  /* 유동 잔액 확인 */
+  function balanceOf(address account) public view override(ERC20, ERC20TimeLockable) returns (uint256) {
+    return super.balanceOf(account);
   }
 
   /* 토큰 동결 */
@@ -48,6 +50,11 @@ contract ERC20All is ERC20Ownable, ERC20Pausable, ERC20Freezable, ERC20TimeLocka
     _unfreeze(account);
   }
 
+  /* 락업 */
+  function lock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
+    _lock(account, amount, reason, release);
+  }
+
   /* 락업 토큰 전송 */
   function transferWithLock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
     _transferWithLock(account, amount, reason, release);
@@ -63,7 +70,7 @@ contract ERC20All is ERC20Ownable, ERC20Pausable, ERC20Freezable, ERC20TimeLocka
     _increaseLockAmount(account, reason, amount);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
+  function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

@@ -25,6 +25,7 @@ interface ERC20AllInterface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
+    "burnFrom(address,uint256)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "extendLock(address,bytes32,uint256)": FunctionFragment;
@@ -33,12 +34,14 @@ interface ERC20AllInterface extends ethers.utils.Interface {
     "increaseAllowance(address,uint256)": FunctionFragment;
     "increaseLockAmount(address,bytes32,uint256)": FunctionFragment;
     "isFreezed(address)": FunctionFragment;
+    "lock(address,uint256,bytes32,uint256)": FunctionFragment;
     "lockReason(address,uint256)": FunctionFragment;
     "locked(address,bytes32)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "pause()": FunctionFragment;
+    "paused()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokensLocked(address,bytes32)": FunctionFragment;
@@ -64,6 +67,10 @@ interface ERC20AllInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "burnFrom",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "decreaseAllowance",
@@ -88,6 +95,10 @@ interface ERC20AllInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "isFreezed", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "lock",
+    values: [string, BigNumberish, BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "lockReason",
     values: [string, BigNumberish]
   ): string;
@@ -99,6 +110,7 @@ interface ERC20AllInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
+  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -147,6 +159,7 @@ interface ERC20AllInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "decreaseAllowance",
@@ -167,12 +180,14 @@ interface ERC20AllInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isFreezed", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "lock", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lockReason", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "locked", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -322,6 +337,18 @@ export class ERC20All extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    burnFrom(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "burnFrom(address,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
     "decimals()"(overrides?: CallOverrides): Promise<[number]>;
@@ -405,6 +432,22 @@ export class ERC20All extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    lock(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "lock(address,uint256,bytes32,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     lockReason(
       arg0: string,
       arg1: BigNumberish,
@@ -466,6 +509,10 @@ export class ERC20All extends Contract {
     "pause()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<[boolean]>;
+
+    "paused()"(overrides?: CallOverrides): Promise<[boolean]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -643,6 +690,18 @@ export class ERC20All extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  burnFrom(
+    account: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "burnFrom(address,uint256)"(
+    account: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   decimals(overrides?: CallOverrides): Promise<number>;
 
   "decimals()"(overrides?: CallOverrides): Promise<number>;
@@ -726,6 +785,22 @@ export class ERC20All extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  lock(
+    account: string,
+    amount: BigNumberish,
+    reason: BytesLike,
+    release: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "lock(address,uint256,bytes32,uint256)"(
+    account: string,
+    amount: BigNumberish,
+    reason: BytesLike,
+    release: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   lockReason(
     arg0: string,
     arg1: BigNumberish,
@@ -787,6 +862,10 @@ export class ERC20All extends Contract {
   "pause()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  paused(overrides?: CallOverrides): Promise<boolean>;
+
+  "paused()"(overrides?: CallOverrides): Promise<boolean>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -961,6 +1040,18 @@ export class ERC20All extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    burnFrom(
+      account: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "burnFrom(address,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     decimals(overrides?: CallOverrides): Promise<number>;
 
     "decimals()"(overrides?: CallOverrides): Promise<number>;
@@ -1041,6 +1132,22 @@ export class ERC20All extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    lock(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "lock(address,uint256,bytes32,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     lockReason(
       arg0: string,
       arg1: BigNumberish,
@@ -1095,6 +1202,10 @@ export class ERC20All extends Contract {
     pause(overrides?: CallOverrides): Promise<void>;
 
     "pause()"(overrides?: CallOverrides): Promise<void>;
+
+    paused(overrides?: CallOverrides): Promise<boolean>;
+
+    "paused()"(overrides?: CallOverrides): Promise<boolean>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -1317,6 +1428,18 @@ export class ERC20All extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    burnFrom(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "burnFrom(address,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1400,6 +1523,22 @@ export class ERC20All extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    lock(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "lock(address,uint256,bytes32,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     lockReason(
       arg0: string,
       arg1: BigNumberish,
@@ -1449,6 +1588,10 @@ export class ERC20All extends Contract {
     "pause()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "paused()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1630,6 +1773,18 @@ export class ERC20All extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    burnFrom(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "burnFrom(address,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1716,6 +1871,22 @@ export class ERC20All extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    lock(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "lock(address,uint256,bytes32,uint256)"(
+      account: string,
+      amount: BigNumberish,
+      reason: BytesLike,
+      release: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     lockReason(
       arg0: string,
       arg1: BigNumberish,
@@ -1765,6 +1936,10 @@ export class ERC20All extends Contract {
     "pause()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "paused()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

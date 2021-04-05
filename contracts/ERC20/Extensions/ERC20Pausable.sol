@@ -1,23 +1,21 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 import "../Core/ERC20.sol";
 
 /**
- * @dev Contract module which allows children to implement an emergency stop
- * mechanism that can be triggered by an authorized account.
+ * @dev ERC20 token with pausable token transfers, minting and burning.
  *
- * This module is used through inheritance. It will make available the
- * modifiers `whenNotPaused` and `whenPaused`, which can be applied to
- * the functions of your contract. Note that they will not be pausable by
- * simply including this module, only once the modifiers are put in place.
+ * Useful for scenarios such as preventing trades until the end of an evaluation
+ * period, or having an emergency switch for freezing all token transfers in the
+ * event of a large bug.
  */
 abstract contract ERC20Pausable is ERC20 {
   /**
    * @dev Emitted when the pause is triggered by `account`.
    */
-    event Paused(address account);
+  event Paused(address account);
 
   /**
    * @dev Emitted when the pause is lifted by `account`.
@@ -29,8 +27,15 @@ abstract contract ERC20Pausable is ERC20 {
   /**
    * @dev Initializes the contract in unpaused state.
    */
-  constructor() internal {
+  constructor() {
     _paused = false;
+  }
+
+  /**
+   * @dev Returns true if the contract is paused, and false otherwise.
+   */
+  function paused() public view virtual returns (bool) {
+    return _paused;
   }
 
   /**
@@ -41,7 +46,7 @@ abstract contract ERC20Pausable is ERC20 {
    * - The contract must not be paused.
    */
   modifier whenNotPaused() {
-    require(!_paused, "Pausable: paused");
+    require(!paused(), "Pausable: paused");
     _;
   }
 
@@ -53,7 +58,7 @@ abstract contract ERC20Pausable is ERC20 {
    * - The contract must be paused.
    */
   modifier whenPaused() {
-    require(_paused, "Pausable: not paused");
+    require(paused(), "Pausable: not paused");
     _;
   }
 
@@ -95,6 +100,6 @@ abstract contract ERC20Pausable is ERC20 {
   ) internal virtual override {
     super._beforeTokenTransfer(from, to, amount);
 
-    require(!_paused, "Pausable: token transfer while paused");
+    require(!paused(), "ERC20Pausable: token transfer while paused");
   }
 }

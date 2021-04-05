@@ -16,10 +16,10 @@ const hardhatConfig: HardhatUserConfig =  {
     hardhat: {},
   },  
   solidity: {
-    version: "0.6.1",
+    version: "0.8.1",
     settings: {
       optimizer: {
-        enabled: false,
+        enabled: true,
         runs: 200
       }
     }
