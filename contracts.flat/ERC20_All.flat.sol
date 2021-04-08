@@ -1,9 +1,8 @@
-// Sources flattened with hardhat v2.1.1 https://hardhat.org
+// Sources flattened with hardhat v2.1.2 https://hardhat.org
 
 // File contracts/ERC20/Interface/IERC20.sol
 
 // SPDX-License-Identifier: MIT
-
 
 pragma solidity ^0.8.0;
 
@@ -88,11 +87,10 @@ interface IERC20 {
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
+
 // File contracts/ERC20/Interface/IERC20Metadata.sol
 
-
-
-
+// SPDX-License-Identifier: MIT
 
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -114,10 +112,10 @@ interface IERC20Metadata is IERC20 {
   function decimals() external view returns (uint8);
 }
 
-// File contracts/ERC20/Utils/Context.sol
 
+// File contracts/Utils/Context.sol
 
-
+// SPDX-License-Identifier: MIT
 
 
 /*
@@ -131,18 +129,20 @@ interface IERC20Metadata is IERC20 {
  * This contract is only required for intermediate, library-like contracts.
  */
 abstract contract Context {
-  function _msgSender() internal view virtual returns (address) {
-    return msg.sender;
-  }
+    function _msgSender() internal view virtual returns (address) {
+        return msg.sender;
+    }
 
-  // function _msgData() internal view virtual returns (bytes calldata) {
-  //   this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-  //   return msg.data;
-  // }
+    function _msgData() internal view virtual returns (bytes calldata) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+        return msg.data;
+    }
 }
+
 
 // File contracts/ERC20/Core/ERC20.sol
 
+// SPDX-License-Identifier: MIT
 
 
 
@@ -503,8 +503,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
 // File contracts/ERC20/Extensions/ERC20Ownable.sol
 
-
-
+// SPDX-License-Identifier: MIT
 
 
 /**
@@ -577,8 +576,7 @@ abstract contract ERC20Ownable is Context {
 
 // File contracts/ERC20/Extensions/ERC20Pausable.sol
 
-
-
+// SPDX-License-Identifier: MIT
 
 
 /**
@@ -684,7 +682,7 @@ abstract contract ERC20Pausable is ERC20 {
 
 // File contracts/ERC20/Extensions/ERC20Freezable.sol
 
-
+// SPDX-License-Identifier: MIT
 
 
 
@@ -739,7 +737,7 @@ abstract contract ERC20Freezable is ERC20 {
 
 // File contracts/ERC20/Extensions/ERC20TimeLockable.sol
 
-
+// SPDX-License-Identifier: MIT
 
 
 
@@ -1043,7 +1041,7 @@ abstract contract ERC20TimeLockable is ERC20 {
 
 // File contracts/ERC20/Extensions/ERC20Mintable.sol
 
-
+// SPDX-License-Identifier: MIT
 
 
 
@@ -1064,7 +1062,7 @@ abstract contract ERC20Mintable is ERC20 {
 
 // File contracts/ERC20/Extensions/ERC20Burnable.sol
 
-
+// SPDX-License-Identifier: MIT
 
 
 
@@ -1105,6 +1103,13 @@ abstract contract ERC20Burnable is ERC20 {
 
 // File contracts/ERC20/Templates/ERC20_All.sol
 
+// SPDX-License-Identifier: MIT
+
+
+
+
+
+
 
 
 
@@ -1122,8 +1127,6 @@ contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, 
     super.mint(amount);
   }
 
-
-  /* 유동 잔액 확인 */
   function balanceOf(address account) public view override(ERC20, ERC20TimeLockable) returns (uint256) {
     return super.balanceOf(account);
   }
