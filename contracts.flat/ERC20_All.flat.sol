@@ -36,10 +36,7 @@ interface IERC20 {
    *
    * This value changes when {approve} or {transferFrom} are called.
    */
-  function allowance(address owner, address spender)
-    external
-    view
-    returns (uint256);
+  function allowance(address owner, address spender) external view returns (uint256);
 
   /**
    * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
@@ -87,7 +84,6 @@ interface IERC20 {
   event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-
 // File contracts/ERC20/Interface/IERC20Metadata.sol
 
 // SPDX-License-Identifier: MIT
@@ -112,11 +108,9 @@ interface IERC20Metadata is IERC20 {
   function decimals() external view returns (uint8);
 }
 
-
 // File contracts/Utils/Context.sol
 
 // SPDX-License-Identifier: MIT
-
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -129,23 +123,19 @@ interface IERC20Metadata is IERC20 {
  * This contract is only required for intermediate, library-like contracts.
  */
 abstract contract Context {
-    function _msgSender() internal view virtual returns (address) {
-        return msg.sender;
-    }
+  function _msgSender() internal view virtual returns (address) {
+    return msg.sender;
+  }
 
-    function _msgData() internal view virtual returns (bytes calldata) {
-        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
-        return msg.data;
-    }
+  function _msgData() internal view virtual returns (bytes calldata) {
+    this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+    return msg.data;
+  }
 }
-
 
 // File contracts/ERC20/Core/ERC20.sol
 
 // SPDX-License-Identifier: MIT
-
-
-
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -237,13 +227,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
   /**
    * @dev See {IERC20-balanceOf}.
    */
-  function balanceOf(address account)
-    public
-    view
-    virtual
-    override
-    returns (uint256)
-  {
+  function balanceOf(address account) public view virtual override returns (uint256) {
     return _balances[account];
   }
 
@@ -255,12 +239,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
    * - `recipient` cannot be the zero address.
    * - the caller must have a balance of at least `amount`.
    */
-  function transfer(address recipient, uint256 amount)
-    public
-    virtual
-    override
-    returns (bool)
-  {
+  function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
     _transfer(_msgSender(), recipient, amount);
     return true;
   }
@@ -268,13 +247,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
   /**
    * @dev See {IERC20-allowance}.
    */
-  function allowance(address owner, address spender)
-    public
-    view
-    virtual
-    override
-    returns (uint256)
-  {
+  function allowance(address owner, address spender) public view virtual override returns (uint256) {
     return _allowances[owner][spender];
   }
 
@@ -285,12 +258,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
    *
    * - `spender` cannot be the zero address.
    */
-  function approve(address spender, uint256 amount)
-    public
-    virtual
-    override
-    returns (bool)
-  {
+  function approve(address spender, uint256 amount) public virtual override returns (bool) {
     _approve(_msgSender(), spender, amount);
     return true;
   }
@@ -316,10 +284,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     _transfer(sender, recipient, amount);
 
     uint256 currentAllowance = _allowances[sender][_msgSender()];
-    require(
-      currentAllowance >= amount,
-      "ERC20: transfer amount exceeds allowance"
-    );
+    require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
     _approve(sender, _msgSender(), currentAllowance - amount);
 
     return true;
@@ -337,16 +302,8 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
    *
    * - `spender` cannot be the zero address.
    */
-  function increaseAllowance(address spender, uint256 addedValue)
-    public
-    virtual
-    returns (bool)
-  {
-    _approve(
-      _msgSender(),
-      spender,
-      _allowances[_msgSender()][spender] + addedValue
-    );
+  function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
+    _approve(_msgSender(), spender, _allowances[_msgSender()][spender] + addedValue);
     return true;
   }
 
@@ -364,16 +321,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
    * - `spender` must have allowance for the caller of at least
    * `subtractedValue`.
    */
-  function decreaseAllowance(address spender, uint256 subtractedValue)
-    public
-    virtual
-    returns (bool)
-  {
+  function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
     uint256 currentAllowance = _allowances[_msgSender()][spender];
-    require(
-      currentAllowance >= subtractedValue,
-      "ERC20: decreased allowance below zero"
-    );
+    require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
     _approve(_msgSender(), spender, currentAllowance - subtractedValue);
 
     return true;
@@ -500,11 +450,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
   ) internal virtual {}
 }
 
-
 // File contracts/ERC20/Extensions/ERC20Ownable.sol
 
 // SPDX-License-Identifier: MIT
-
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -521,10 +469,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 abstract contract ERC20Ownable is Context {
   address private _owner;
 
-  event OwnershipTransferred(
-    address indexed previousOwner,
-    address indexed newOwner
-  );
+  event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
   /**
    * @dev Initializes the contract setting the deployer as the initial owner.
@@ -573,11 +518,9 @@ abstract contract ERC20Ownable is Context {
   }
 }
 
-
 // File contracts/ERC20/Extensions/ERC20Pausable.sol
 
 // SPDX-License-Identifier: MIT
-
 
 /**
  * @dev ERC20 token with pausable token transfers, minting and burning.
@@ -679,12 +622,9 @@ abstract contract ERC20Pausable is ERC20 {
   }
 }
 
-
 // File contracts/ERC20/Extensions/ERC20Freezable.sol
 
 // SPDX-License-Identifier: MIT
-
-
 
 abstract contract ERC20Freezable is ERC20 {
   /**
@@ -734,12 +674,9 @@ abstract contract ERC20Freezable is ERC20 {
   }
 }
 
-
 // File contracts/ERC20/Extensions/ERC20TimeLockable.sol
 
 // SPDX-License-Identifier: MIT
-
-
 
 abstract contract ERC20TimeLockable is ERC20 {
   /**
@@ -765,21 +702,12 @@ abstract contract ERC20TimeLockable is ERC20 {
   /**
    * @dev Records data of all the tokens Locked
    */
-  event Locked(
-    address indexed account,
-    bytes32 indexed reason,
-    uint256 amount,
-    uint256 release
-  );
+  event Locked(address indexed account, bytes32 indexed reason, uint256 amount, uint256 release);
 
   /**
    * @dev Records data of all the tokens unlocked
    */
-  event Unlocked(
-    address indexed account,
-    bytes32 indexed reason,
-    uint256 amount
-  );
+  event Unlocked(address indexed account, bytes32 indexed reason, uint256 amount);
 
   /**
    * @dev Locks a specified amount of tokens against an address,
@@ -797,14 +725,8 @@ abstract contract ERC20TimeLockable is ERC20 {
   ) internal virtual returns (bool) {
     // If tokens are already locked, then functions extendLock or
     // increaseLockAmount should be used to make any changes
-    require(
-      account != address(0),
-      "TimeLockable: lock account the zero address"
-    );
-    require(
-      tokensLocked(account, reason) == 0,
-      "TimeLockable: Tokens already locked"
-    );
+    require(account != address(0), "TimeLockable: lock account the zero address");
+    require(tokensLocked(account, reason) == 0, "TimeLockable: Tokens already locked");
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[account] >= amount, "TimeLockable: Not enough amount");
 
@@ -832,14 +754,8 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 release
   ) internal virtual returns (bool) {
-    require(
-      account != address(0),
-      "TimeLockable: lock account the zero address"
-    );
-    require(
-      tokensLocked(account, reason) == 0,
-      "TimeLockable: Tokens already locked"
-    );
+    require(account != address(0), "TimeLockable: lock account the zero address");
+    require(tokensLocked(account, reason) == 0, "TimeLockable: Tokens already locked");
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[msg.sender] >= amount, "TimeLockable: Not enough amount");
 
@@ -855,13 +771,8 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @param account The address whose tokens are locked
    * @param reason The reason to query the lock tokens for
    */
-  function tokensLocked(address account, bytes32 reason)
-    public
-    view
-    returns (uint256 amount)
-  {
-    if (!locked[account][reason].claimed)
-      amount = locked[account][reason].amount;
+  function tokensLocked(address account, bytes32 reason) public view returns (uint256 amount) {
+    if (!locked[account][reason].claimed) amount = locked[account][reason].amount;
   }
 
   /**
@@ -877,17 +788,10 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 time
   ) public view returns (uint256 amount) {
-    if (locked[account][reason].release > time)
-      amount = locked[account][reason].amount;
+    if (locked[account][reason].release > time) amount = locked[account][reason].amount;
   }
 
-  function balanceOf(address account)
-    public
-    view
-    virtual
-    override
-    returns (uint256)
-  {
+  function balanceOf(address account) public view virtual override returns (uint256) {
     uint256 unlockableAmount = getUnlockableTokens(account);
     return super.balanceOf(account) + unlockableAmount;
   }
@@ -896,11 +800,7 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @dev Returns total tokens held by an address (locked + transferable)
    * @param account The address to query the total balance of
    */
-  function totalBalanceOf(address account)
-    public
-    view
-    returns (uint256 amount)
-  {
+  function totalBalanceOf(address account) public view returns (uint256 amount) {
     amount = balanceOf(account);
 
     for (uint256 i = 0; i < lockReason[account].length; i++) {
@@ -919,19 +819,11 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 time
   ) internal virtual returns (bool) {
-    require(
-      tokensLocked(account, reason) > 0,
-      "TimeLockable: No tokens locked"
-    );
+    require(tokensLocked(account, reason) > 0, "TimeLockable: No tokens locked");
 
     locked[account][reason].release = locked[account][reason].release + time;
 
-    emit Locked(
-      account,
-      reason,
-      locked[account][reason].amount,
-      locked[account][reason].release
-    );
+    emit Locked(account, reason, locked[account][reason].amount, locked[account][reason].release);
     return true;
   }
 
@@ -946,10 +838,7 @@ abstract contract ERC20TimeLockable is ERC20 {
     bytes32 reason,
     uint256 amount
   ) internal virtual returns (bool) {
-    require(
-      tokensLocked(account, reason) > 0,
-      "TimeLockable: No tokens locked"
-    );
+    require(tokensLocked(account, reason) > 0, "TimeLockable: No tokens locked");
     require(amount != 0, "TimeLockable: Amount can not be zero");
     require(_balances[account] >= amount, "TimeLockable: Not enough amount");
 
@@ -957,12 +846,7 @@ abstract contract ERC20TimeLockable is ERC20 {
 
     locked[account][reason].amount = locked[account][reason].amount + amount;
 
-    emit Locked(
-      account,
-      reason,
-      locked[account][reason].amount,
-      locked[account][reason].release
-    );
+    emit Locked(account, reason, locked[account][reason].amount, locked[account][reason].release);
     return true;
   }
 
@@ -971,15 +855,8 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @param account The address to query the the unlockable token count of
    * @param reason The reason to query the unlockable tokens for
    */
-  function tokensUnlockable(address account, bytes32 reason)
-    public
-    view
-    returns (uint256 amount)
-  {
-    if (
-      locked[account][reason].release <= block.timestamp &&
-      !locked[account][reason].claimed
-    )
+  function tokensUnlockable(address account, bytes32 reason) public view returns (uint256 amount) {
+    if (locked[account][reason].release <= block.timestamp && !locked[account][reason].claimed)
       //solhint-disable-line
       amount = locked[account][reason].amount;
   }
@@ -988,11 +865,7 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @dev Unlocks the unlockable tokens of a specified address
    * @param account Address of user, claiming back unlockable tokens
    */
-  function _unlock(address account)
-    internal
-    virtual
-    returns (uint256 unlockableTokens)
-  {
+  function _unlock(address account) internal virtual returns (uint256 unlockableTokens) {
     uint256 lockedTokens;
 
     for (uint256 i = 0; i < lockReason[account].length; i++) {
@@ -1011,15 +884,9 @@ abstract contract ERC20TimeLockable is ERC20 {
    * @dev Gets the unlockable tokens of a specified address
    * @param account The address to query the the unlockable token count of
    */
-  function getUnlockableTokens(address account)
-    public
-    view
-    returns (uint256 unlockableTokens)
-  {
+  function getUnlockableTokens(address account) public view returns (uint256 unlockableTokens) {
     for (uint256 i = 0; i < lockReason[account].length; i++) {
-      unlockableTokens = unlockableTokens + (
-        tokensUnlockable(account, lockReason[account][i])
-      );
+      unlockableTokens = unlockableTokens + (tokensUnlockable(account, lockReason[account][i]));
     }
   }
 
@@ -1038,33 +905,26 @@ abstract contract ERC20TimeLockable is ERC20 {
   }
 }
 
-
 // File contracts/ERC20/Extensions/ERC20Mintable.sol
 
 // SPDX-License-Identifier: MIT
-
-
 
 /**
  * @dev  Extension of {ERC20} that allows token to issue
  */
 abstract contract ERC20Mintable is ERC20 {
-   
   /**
    * @dev Function to mint tokens
    * @param amount The amount of tokens to mint.
    */
   function mint(uint256 amount) public virtual {
-      _mint(_msgSender(), amount);
+    _mint(_msgSender(), amount);
   }
 }
-
 
 // File contracts/ERC20/Extensions/ERC20Burnable.sol
 
 // SPDX-License-Identifier: MIT
-
-
 
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
@@ -1072,49 +932,39 @@ abstract contract ERC20Mintable is ERC20 {
  * recognized off-chain (via event analysis).
  */
 abstract contract ERC20Burnable is ERC20 {
-    /**
-     * @dev Destroys `amount` tokens from the caller.
-     *
-     * See {ERC20-_burn}.
-     */
-    function burn(uint256 amount) public virtual {
-        _burn(_msgSender(), amount);
-    }
+  /**
+   * @dev Destroys `amount` tokens from the caller.
+   *
+   * See {ERC20-_burn}.
+   */
+  function burn(uint256 amount) public virtual {
+    _burn(_msgSender(), amount);
+  }
 
-    /**
-     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
-     * allowance.
-     *
-     * See {ERC20-_burn} and {ERC20-allowance}.
-     *
-     * Requirements:
-     *
-     * - the caller must have allowance for ``accounts``'s tokens of at least
-     * `amount`.
-     */
-    function burnFrom(address account, uint256 amount) public virtual {
-        uint256 currentAllowance = allowance(account, _msgSender());
-        require(currentAllowance >= amount, "ERC20: burn amount exceeds allowance");
-        _approve(account, _msgSender(), currentAllowance - amount);
-        _burn(account, amount);
-    }
+  /**
+   * @dev Destroys `amount` tokens from `account`, deducting from the caller's
+   * allowance.
+   *
+   * See {ERC20-_burn} and {ERC20-allowance}.
+   *
+   * Requirements:
+   *
+   * - the caller must have allowance for ``accounts``'s tokens of at least
+   * `amount`.
+   */
+  function burnFrom(address account, uint256 amount) public virtual {
+    uint256 currentAllowance = allowance(account, _msgSender());
+    require(currentAllowance >= amount, "ERC20: burn amount exceeds allowance");
+    _approve(account, _msgSender(), currentAllowance - amount);
+    _burn(account, amount);
+  }
 }
-
 
 // File contracts/ERC20/Templates/ERC20_All.sol
 
 // SPDX-License-Identifier: MIT
 
-
-
-
-
-
-
-
-
 contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, ERC20Freezable, ERC20TimeLockable {
-  
   constructor(
     string memory name,
     string memory symbol,
@@ -1152,26 +1002,48 @@ contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, 
   }
 
   /* 락업 */
-  function lock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
+  function lock(
+    address account,
+    uint256 amount,
+    bytes32 reason,
+    uint256 release
+  ) public onlyOwner {
     _lock(account, amount, reason, release);
   }
 
   /* 락업 토큰 전송 */
-  function transferWithLock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
+  function transferWithLock(
+    address account,
+    uint256 amount,
+    bytes32 reason,
+    uint256 release
+  ) public onlyOwner {
     _transferWithLock(account, amount, reason, release);
   }
 
   /* 락업 기간 연장 */
-  function extendLock(address account, bytes32 reason, uint256 time) public onlyOwner {
+  function extendLock(
+    address account,
+    bytes32 reason,
+    uint256 time
+  ) public onlyOwner {
     _extendLock(account, reason, time);
   }
 
   /* 락업 수량 증액 */
-  function increaseLockAmount(address account, bytes32 reason, uint256 amount) public onlyOwner {
+  function increaseLockAmount(
+    address account,
+    bytes32 reason,
+    uint256 amount
+  ) public onlyOwner {
     _increaseLockAmount(account, reason, amount);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 amount
+  ) internal override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }

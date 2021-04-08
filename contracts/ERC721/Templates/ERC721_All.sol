@@ -4,16 +4,11 @@ pragma solidity ^0.8.0;
 
 import "../Core/ERC721.sol";
 import "../Extensions/ERC721Ownable.sol";
+
 // import "../Extensions/ERC721Enumerable"
 
 contract ERC721All is ERC721, ERC721Ownable {
-  
-  constructor(
-    string memory name,
-    string memory symbol
-  ) ERC721(name, symbol) {
-    
-  }
+  constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
 
   function baseURI() public view returns (string memory) {
     return _baseURI();
@@ -26,12 +21,16 @@ contract ERC721All is ERC721, ERC721Ownable {
   function mint(address to, uint256 tokenId) public onlyOwner {
     _mint(to, tokenId);
   }
-  
+
   function safeMint(address to, uint256 tokenId) public onlyOwner {
     _safeMint(to, tokenId);
   }
 
-  function safeMint(address to, uint256 tokenId, bytes memory _data) public {
+  function safeMint(
+    address to,
+    uint256 tokenId,
+    bytes memory _data
+  ) public {
     _safeMint(to, tokenId, _data);
   }
 

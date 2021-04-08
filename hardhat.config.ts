@@ -2,6 +2,7 @@ import { HardhatUserConfig } from "hardhat/types";
 import "hardhat-gas-reporter";
 import "hardhat-typechain";
 import "hardhat-abi-exporter";
+import "hardhat-tracer";
 
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
@@ -25,7 +26,7 @@ const hardhatConfig: HardhatUserConfig =  {
     }
   },
   gasReporter: {
-    enabled: false,
+    enabled: true,
   },
   typechain: {
     outDir: "src/typechain",
@@ -37,7 +38,7 @@ const hardhatConfig: HardhatUserConfig =  {
     flat: true,
     spacing: 2,
   }
-  // TODO: Add spdx license identifier
+  // TODO: spdx license identifier
   // spdxLicenseIdentifier: {
   //   overwrite: true,
   //   runOnCompile: true,

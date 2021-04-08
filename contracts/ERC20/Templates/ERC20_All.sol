@@ -11,7 +11,6 @@ import "../Extensions/ERC20Mintable.sol";
 import "../Extensions/ERC20Burnable.sol";
 
 contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, ERC20Freezable, ERC20TimeLockable {
-  
   constructor(
     string memory name,
     string memory symbol,
@@ -49,26 +48,48 @@ contract ERC20All is ERC20Ownable, ERC20Mintable, ERC20Burnable, ERC20Pausable, 
   }
 
   /* 락업 */
-  function lock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
+  function lock(
+    address account,
+    uint256 amount,
+    bytes32 reason,
+    uint256 release
+  ) public onlyOwner {
     _lock(account, amount, reason, release);
   }
 
   /* 락업 토큰 전송 */
-  function transferWithLock(address account, uint256 amount, bytes32 reason, uint256 release) public onlyOwner {
+  function transferWithLock(
+    address account,
+    uint256 amount,
+    bytes32 reason,
+    uint256 release
+  ) public onlyOwner {
     _transferWithLock(account, amount, reason, release);
   }
 
   /* 락업 기간 연장 */
-  function extendLock(address account, bytes32 reason, uint256 time) public onlyOwner {
+  function extendLock(
+    address account,
+    bytes32 reason,
+    uint256 time
+  ) public onlyOwner {
     _extendLock(account, reason, time);
   }
 
   /* 락업 수량 증액 */
-  function increaseLockAmount(address account, bytes32 reason, uint256 amount) public onlyOwner {
+  function increaseLockAmount(
+    address account,
+    bytes32 reason,
+    uint256 amount
+  ) public onlyOwner {
     _increaseLockAmount(account, reason, amount);
   }
 
-  function _beforeTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 amount
+  ) internal override(ERC20, ERC20Pausable, ERC20Freezable, ERC20TimeLockable) {
     super._beforeTokenTransfer(from, to, amount);
   }
 }
