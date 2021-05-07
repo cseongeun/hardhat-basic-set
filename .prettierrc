@@ -1,9 +1,12 @@
 {
+  "printWidth": 200,
+  "singleQuote": false,
+  "tabWidth": 2,
   "overrides": [
     {
       "files": "*.sol",
       "options": {
-        "printWidth": 120,
+        "printWidth": 150,
         "tabWidth": 2,
         "useTabs": false,
         "singleQuote": false,

@@ -1,15 +1,7 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
 
-import {
-  SignerWithAddress,
-  Contract,
-  constants,
-  randomBytes,
-  formatStruct,
-  time,
-  BigNumber,
-} from "../../utils";
+import { SignerWithAddress, Contract, constants, randomBytes, formatStruct, time, BigNumber } from "../../utils";
 
 const { AddressZero, NegativeOne, Zero, One, Two } = constants;
 const Three: BigNumber = BigNumber.from(3);
@@ -37,10 +29,7 @@ export function ERC721Scripts() {
     });
 
     beforeEach(async function () {
-      const tokenContract = await ethers.getContractFactory(
-        MAIN_CONTRACT,
-        owner
-      );
+      const tokenContract = await ethers.getContractFactory(MAIN_CONTRACT, owner);
       token = await tokenContract.deploy(tokenName, tokenSymbol);
     });
 
